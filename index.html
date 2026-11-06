@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лингвострановедческий потенциал теории языковой личности — Брыскин Н.М.</title>
+
+<!-- Библиотеки для экспорта в PPTX -->
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+  :root{
+    --ink:#101f38;
+    --ink-soft:#26374f;
+    --muted:#5f6f86;
+    --line:#ded8cc;
+    --paper:#f7f5f0;
+    --card:#ffffff;
+    --accent:#8a1538;
+    --accent-soft:#f2e6ea;
+    --gold:#b08a3e;
+    --navy:#142a4d;
+    --navy-soft:#e8edf5;
+    --shadow:0 18px 46px -22px rgba(16,31,56,.45);
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{height:100%;}
+
+  body{
+    margin:0;
+    font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1100px 620px at 12% -10%, #ffffff 0%, rgba(255,255,255,0) 62%),
+      radial-gradient(900px 560px at 92% 108%, #efe9dc 0%, rgba(239,233,220,0) 60%),
+      var(--paper);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:34px 18px 76px;
+    overflow:hidden;
+  }
+
+  /* ---------- Прогресс ---------- */
+  .progress{
+    position:fixed; top:0; left:0; right:0; height:4px;
+    background:rgba(16,31,56,.08); z-index:50;
+  }
+  .progress__bar{
+    height:100%; width:0%;
+    background:linear-gradient(90deg,var(--navy),var(--accent),var(--gold));
+    transition:width .35s ease;
+  }
+
+  /* ---------- Сцена ---------- */
+  .deck{
+    position:relative;
+    width:min(1180px, 95vw);
+    height:min(740px, calc(100vh - 130px));
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .deck::before{
+    content:"";
+    position:absolute; inset:0 0 auto 0; height:5px;
+    background:linear-gradient(90deg,var(--navy) 0%,var(--accent) 55%,var(--gold) 100%);
+    z-index:2;
+  }
+
+  .slide{
+    display:none;
+    position:absolute; inset:0;
+    padding:clamp(26px,3.4vw,54px) clamp(24px,4vw,64px) clamp(46px,5vw,64px);
+    flex-direction:column;
+    overflow-y:auto;
+  }
+  .slide.is-active{ display:flex; animation:fade .42s ease both; }
+  @keyframes fade{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* Отключение анимации во время экспорта */
+  body.exporting .slide,
+  body.exporting .slide.is-active{
+    animation:none !important;
+    transition:none !important;
+  }
+
+  /* ---------- Титул ---------- */
+  .slide--title{
+    justify-content:center;
+    background:
+      radial-gradient(720px 420px at 88% 12%, rgba(138,21,56,.07), transparent 70%),
+      radial-gradient(600px 400px at 6% 92%, rgba(176,138,62,.10), transparent 70%);
+  }
+  .title__meta{
+    font-size:clamp(.72rem,.95vw,.86rem);
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    margin-bottom:18px;
+  }
+  .slide--title h1{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:clamp(1.55rem,3.1vw,2.55rem);
+    line-height:1.2;
+    margin:0 0 14px;
+    max-width:22ch;
+    color:var(--navy);
+    font-weight:700;
+  }
+  .title__sub{
+    font-size:clamp(.92rem,1.3vw,1.14rem);
+    color:var(--muted);
+    margin:0;
+    max-width:52ch;
+    line-height:1.5;
+  }
+  .rule{
+    width:88px; height:3px; margin:26px 0 22px;
+    background:linear-gradient(90deg,var(--accent),var(--gold));
+    border-radius:2px;
+  }
+  .title__author{
+    font-size:clamp(.92rem,1.2vw,1.05rem);
+    font-weight:700;
+    color:var(--ink);
+    letter-spacing:.01em;
+  }
+  .title__author small{
+    display:block; margin-top:5px;
+    font-weight:400; letter-spacing:.05em;
+    color:var(--muted); font-size:.85em;
+  }
+
+  /* ---------- Заголовки слайдов ---------- */
+  .kicker{
+    display:inline-block;
+    font-size:clamp(.66rem,.85vw,.76rem);
+    font-weight:800;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:9px;
+    padding-left:11px;
+    border-left:3px solid var(--gold);
+  }
+  .slide h2{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:clamp(1.15rem,1.95vw,1.62rem);
+    line-height:1.25;
+    margin:0 0 18px;
+    color:var(--navy);
+    font-weight:700;
+  }
+  .slide h2 em{ font-style:normal; color:var(--accent); }
+
+  /* ---------- Списки ---------- */
+  ul.bullets{
+    list-style:none; margin:0; padding:0;
+    display:flex; flex-direction:column; gap:11px;
+  }
+  ul.bullets li{
+    position:relative;
+    padding-left:24px;
+    font-size:clamp(.85rem,1.12vw,1rem);
+    line-height:1.5;
+    color:var(--ink-soft);
+  }
+  ul.bullets li::before{
+    content:"";
+    position:absolute; left:4px; top:.62em;
+    width:8px; height:8px; border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 0 3px rgba(176,138,62,.16);
+  }
+  ul.bullets b{ color:var(--ink); }
+
+  /* ---------- Карточки ---------- */
+  .grid{ display:grid; gap:14px; }
+  .grid--3{ grid-template-columns:repeat(3,1fr); }
+  .grid--2{ grid-template-columns:repeat(2,1fr); }
+
+  .card{
+    background:#fdfcfa;
+    border:1px solid var(--line);
+    border-top:3px solid var(--navy);
+    border-radius:4px;
+    padding:16px 18px;
+  }
+  .card h3{
+    margin:0 0 8px;
+    font-size:clamp(.86rem,1.08vw,.98rem);
+    color:var(--navy);
+    letter-spacing:.02em;
+  }
+  .card p{
+    margin:0;
+    font-size:clamp(.78rem,.98vw,.88rem);
+    line-height:1.48;
+    color:var(--muted);
+  }
+  .card--accent{ border-top-color:var(--accent); }
+  .card--accent h3{ color:var(--accent); }
+  .card--gold{ border-top-color:var(--gold); }
+  .card--gold h3{ color:#8a6a25; }
+
+  /* ---------- Цитата ---------- */
+  .quote{
+    background:var(--navy-soft);
+    border-left:4px solid var(--navy);
+    border-radius:0 4px 4px 0;
+    padding:14px 20px;
+    margin:0 0 18px;
+    font-size:clamp(.82rem,1.05vw,.95rem);
+    line-height:1.5;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+  .quote span{ font-style:normal; color:var(--muted); }
+
+  /* ---------- Уровни (диаграмма) ---------- */
+  .levels{ display:flex; flex-direction:column; gap:9px; }
+  .level{
+    display:grid;
+    grid-template-columns:minmax(190px, 1.05fr) 2fr;
+    gap:0;
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .level__name{
+    padding:12px 16px;
+    font-weight:700;
+    font-size:clamp(.78rem,1vw,.9rem);
+    line-height:1.35;
+    color:#fff;
+    display:flex; align-items:center;
+  }
+  .level__desc{
+    padding:12px 16px;
+    font-size:clamp(.76rem,.97vw,.87rem);
+    line-height:1.42;
+    color:var(--ink-soft);
+    background:#fdfcfa;
+    display:flex; align-items:center;
+  }
+  .level--1 .level__name{ background:var(--navy); }
+  .level--2 .level__name{ background:#3a5580; }
+  .level--3 .level__name{ background:var(--accent); }
+  .level__name small{
+    display:block; font-weight:400; opacity:.78; font-size:.82em; margin-top:2px;
+  }
+
+  /* ---------- Таблица ---------- */
+  table.synth{
+    width:100%;
+    border-collapse:collapse;
+    font-size:clamp(.75rem,.96vw,.88rem);
+    margin-top:4px;
+  }
+  table.synth th{
+    background:var(--navy);
+    color:#fff;
+    text-align:left;
+    padding:11px 14px;
+    font-weight:700;
+    font-size:.92em;
+    letter-spacing:.03em;
+  }
+  table.synth th:first-child{ border-radius:4px 0 0 0; }
+  table.synth th:last-child{ border-radius:0 4px 0 0; }
+  table.synth td{
+    padding:11px 14px;
+    border-bottom:1px solid var(--line);
+    line-height:1.42;
+    color:var(--ink-soft);
+    vertical-align:top;
+  }
+  table.synth tbody tr:nth-child(even) td{ background:#faf9f6; }
+  table.synth td:first-child{ font-weight:600; color:var(--navy); }
+  table.synth td:nth-child(2){ color:var(--accent); font-weight:600; }
+
+  /* ---------- Шаги ---------- */
+  .steps{ display:flex; flex-direction:column; gap:11px; }
+  .step{
+    display:grid;
+    grid-template-columns:44px 1fr;
+    gap:16px;
+    align-items:start;
+    background:#fdfcfa;
+    border:1px solid var(--line);
+    border-left:3px solid var(--gold);
+    border-radius:0 4px 4px 0;
+    padding:13px 18px 13px 16px;
+  }
+  .step__num{
+    width:32px; height:32px; border-radius:50%;
+    display:grid; place-items:center;
+    background:var(--navy); color:#fff;
+    font-weight:700; font-size:.9rem;
+  }
+  .step p{
+    margin:0;
+    font-size:clamp(.79rem,1vw,.9rem);
+    line-height:1.48;
+    color:var(--ink-soft);
+  }
+  .step p b{ color:var(--navy); }
+
+  /* ---------- Выноска ---------- */
+  .callout{
+    margin-top:auto;
+    background:var(--accent-soft);
+    border-left:4px solid var(--accent);
+    border-radius:0 4px 4px 0;
+    padding:13px 18px;
+    font-size:clamp(.78rem,.99vw,.9rem);
+    line-height:1.48;
+    color:var(--ink-soft);
+  }
+  .callout b{ color:var(--accent); }
+
+  .callout--navy{
+    background:var(--navy-soft);
+    border-left-color:var(--navy);
+  }
+  .callout--navy b{ color:var(--navy); }
+
+  /* ---------- Навигация ---------- */
+  .controls{
+    position:fixed;
+    bottom:18px; left:50%; transform:translateX(-50%);
+    display:flex; align-items:center; gap:6px;
+    background:rgba(255,255,255,.9);
+    backdrop-filter:blur(8px);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:6px 10px;
+    box-shadow:0 10px 26px -16px rgba(16,31,56,.55);
+    z-index:60;
+  }
+  .controls button{
+    width:34px; height:34px;
+    border:1px solid transparent;
+    background:transparent;
+    color:var(--navy);
+    border-radius:50%;
+    font-size:1.15rem;
+    line-height:1;
+    cursor:pointer;
+    transition:.18s;
+    display:grid; place-items:center;
+  }
+  .controls button:hover{ background:var(--navy); color:#fff; }
+  .controls button:active{ transform:scale(.93); }
+  .counter{
+    font-size:.78rem;
+    letter-spacing:.08em;
+    color:var(--muted);
+    padding:0 6px;
+    font-variant-numeric:tabular-nums;
+    user-select:none;
+  }
+  .counter b{ color:var(--accent); }
+
+  .controls .divider{
+    width:1px; height:18px;
+    background:var(--line);
+    margin:0 2px;
+  }
+  .controls .icon-btn{
+    color:var(--accent);
+  }
+  .controls .icon-btn:hover{
+    background:var(--accent);
+    color:#fff;
+  }
+  .controls .icon-btn svg{
+    width:16px; height:16px;
+    display:block;
+  }
+  .controls .icon-btn.loading svg{
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .hint{
+    position:fixed;
+    bottom:24px; right:24px;
+    font-size:.7rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#a7a094;
+    z-index:60;
+    user-select:none;
+  }
+
+  /* ---------- Оверлей экспорта ---------- */
+  .export-overlay{
+    position:fixed; inset:0;
+    background:rgba(16,31,56,.86);
+    backdrop-filter:blur(6px);
+    z-index:999;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    color:#fff;
+    font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  .export-overlay.is-visible{ display:flex; }
+  .export-overlay .spinner{
+    width:44px; height:44px;
+    border:3px solid rgba(255,255,255,.2);
+    border-top-color:var(--gold);
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
+  .export-overlay p{
+    margin:0;
+    font-size:.95rem;
+    font-weight:600;
+    letter-spacing:.06em;
+  }
+  .export-overlay .progress-text{
+    font-size:.78rem;
+    font-weight:400;
+    opacity:.72;
+    letter-spacing:.08em;
+  }
+
+  /* ---------- Адаптив ---------- */
+  @media (max-width:860px){
+    .grid--3{ grid-template-columns:1fr; }
+    .grid--2{ grid-template-columns:1fr; }
+    .level{ grid-template-columns:1fr; }
+    .level__name{ padding:9px 14px; }
+    .level__desc{ padding:10px 14px; }
+    .slide{ padding:24px 20px 56px; }
+    .deck{ height:calc(100vh - 120px); }
+    .hint{ display:none; }
+  }
+
+  /* ---------- Печать ---------- */
+  @media print{
+    body{ display:block; padding:0; background:#fff; overflow:visible; }
+    .deck{ width:100%; height:auto; box-shadow:none; border:none; border-radius:0; }
+    .slide{
+      display:flex !important;
+      position:static;
+      height:auto;
+      min-height:0;
+      page-break-after:always;
+      animation:none;
+      padding:26px 30px 34px;
+    }
+    .deck::before, .progress, .controls, .hint, .export-overlay{ display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="progress__bar" id="bar"></div></div>
+
+<main class="deck" id="deck">
+
+  <!-- 1. ТИТУЛ -->
+  <section class="slide slide--title is-active">
+    <div class="title__meta">Республика Беларусь · г. Могилёв</div>
+    <h1>Лингвострановедческий потенциал теории языковой личности</h1>
+    <p class="title__sub">концептуальный синтез моделей Ю.Н. Караулова и В.И. Карасика</p>
+    <div class="rule"></div>
+    <div class="title__author">
+      Брыскин Никита Михайлович
+      <small>научный доклад · материалы конференции</small>
+    </div>
+  </section>
+
+  <!-- 2. ВВЕДЕНИЕ -->
+  <section class="slide">
+    <span class="kicker">Введение</span>
+    <h2>Проблема и цель исследования</h2>
+
+    <ul class="bullets">
+      <li><b>Антропоцентрическая лингвистика</b> рассматривает языковую личность как центральную категорию, связывающую язык, культуру и коммуникативное поведение.</li>
+      <li><b>Лингвострановедение</b> изучает национально-культурную специфику речевого общения, носителем которой является языковая личность.</li>
+      <li><b>Проблема:</b> до сих пор не выработан единый инструментарий лингвострановедческого анализа языковой личности, в частности политика.</li>
+    </ul>
+
+    <div class="callout callout--navy" style="margin-top:22px;">
+      <b>Цель</b> — обосновать концептуальный синтез моделей Ю.Н. Караулова и В.И. Карасика как теоретическую основу такого анализа.
+    </div>
+  </section>
+
+  <!-- 3. РАЗДЕЛ 1 -->
+  <section class="slide">
+    <span class="kicker">Раздел 1</span>
+    <h2>Лингвострановедение и теория языковой личности: <em>точки соприкосновения</em></h2>
+
+    <ul class="bullets" style="margin-bottom:16px;">
+      <li><b>Е.М. Верещагин, В.Г. Костомаров:</b> лингвострановедение — аспект преподавания иностранного языка, обеспечивающий передачу фоновых знаний о культуре страны изучаемого языка.</li>
+      <li><b>1990-е гг.:</b> содержание уточнено — дисциплина, реализующая отбор и презентацию сведений о национально-культурной специфике речевого общения языковой личности с целью обеспечения коммуникативной компетенции.</li>
+    </ul>
+
+    <div class="grid grid--2" style="margin-bottom:16px;">
+      <div class="card">
+        <h3>Теория ЯЛ → лингвострановедению</h3>
+        <p>Объект описания: личность как носитель культуры.</p>
+      </div>
+      <div class="card card--accent">
+        <h3>Лингвострановедение → теории ЯЛ</h3>
+        <p>Ракурс анализа: национально-маркированные единицы и концепты.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      Наиболее продуктивен <b>лингвокультурологический подход</b>: языковая личность — «феномен культуры», язык — «вместилище народного духа».
+    </div>
+  </section>
+
+  <!-- 4. МОДЕЛЬ КАРАУЛОВА -->
+  <section class="slide">
+    <span class="kicker">Раздел 2</span>
+    <h2>Модель Ю.Н. Караулова: <em>трёхуровневая структура</em></h2>
+
+    <div class="quote">
+      Языковая личность — совокупность способностей и характеристик человека, обусловливающих создание и восприятие им речевых произведений, различающихся степенью структурно-языковой сложности, глубиной отражения действительности и целевой направленностью.
+    </div>
+
+    <div class="levels">
+      <div class="level level--1">
+        <div class="level__name">Мотивационный<small>прагматический</small></div>
+        <div class="level__desc">Коммуникативные потребности, цели, мотивы. Стереотипы — <b>прецедентные тексты</b>.</div>
+      </div>
+      <div class="level level--2">
+        <div class="level__name">Лингвокогнитивный<small>тезаурусный</small></div>
+        <div class="level__desc">Картина мира, концепты и идеи, иерархия ценностей. <i>Именно с этого уровня начинается собственно языковая личность.</i></div>
+      </div>
+      <div class="level level--3">
+        <div class="level__name">Вербально-семантический<small>нулевой</small></div>
+        <div class="level__desc">Степень владения обыденным языком. Единицы — слова; стереотипы — стандартные словосочетания.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. ПОТЕНЦИАЛ И ОГРАНИЧЕНИЕ -->
+  <section class="slide">
+    <span class="kicker">Раздел 2 · продолжение</span>
+    <h2>Лингвострановедческий потенциал модели Караулова</h2>
+
+    <p style="margin:0 0 14px; font-size:clamp(.82rem,1.05vw,.95rem); line-height:1.5; color:var(--ink-soft);">
+      Каждый уровень содержит <b>национально-культурную (инвариантную)</b> и <b>индивидуальную (вариативную)</b> составляющие.
+    </p>
+
+    <div class="grid grid--3" style="margin-bottom:18px;">
+      <div class="card card--gold">
+        <h3>Вербально-семантический</h3>
+        <p>Реалии, фоновая и коннотативная лексика.</p>
+      </div>
+      <div class="card">
+        <h3>Лингвокогнитивный</h3>
+        <p>Культурно-значимые концепты и идеологемы.</p>
+      </div>
+      <div class="card card--accent">
+        <h3>Мотивационный</h3>
+        <p>Национально-специфические коммуникативные стратегии и прецедентные феномены.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>Ограничение модели:</b> она даёт преимущественно <b>вертикальную иерархию</b>, тогда как для лингвострановедческого описания важно и <b>горизонтальное измерение</b> — аксиологическое, когнитивное и прагматическое.
+    </div>
+  </section>
+
+  <!-- 6. МОДЕЛЬ КАРАСИКА -->
+  <section class="slide">
+    <span class="kicker">Раздел 3</span>
+    <h2>Модель В.И. Карасика: <em>аспекты языковой личности</em></h2>
+
+    <div class="quote">
+      Языковая личность — «серединное звено» между языковым сознанием и речевым поведением.
+    </div>
+
+    <div class="grid grid--3" style="margin-bottom:16px;">
+      <div class="card card--accent">
+        <h3>Ценностный</h3>
+        <p>Этические и утилитарные нормы поведения, свойственные этносу. Выражается в прецедентных текстах, правилах этикета, оценочных значениях.</p>
+      </div>
+      <div class="card">
+        <h3>Познавательный<br>(когнитивный)</h3>
+        <p>Картина мира, способы интерпретации действительности, концепты.</p>
+      </div>
+      <div class="card card--gold">
+        <h3>Поведенческий</h3>
+        <p>Вербальные и невербальные индексы, коммуникативные стратегии и тактики.</p>
+      </div>
+    </div>
+
+    <p style="margin:0 0 12px; font-size:clamp(.8rem,1.02vw,.92rem); line-height:1.48; color:var(--ink-soft);">
+      <b>Элитарная языковая личность</b> — носитель элитарной речевой культуры, служащий моделью для лингвокультурного сообщества.
+    </p>
+
+    <div class="callout" style="margin-top:0;">
+      <b>Ценность:</b> акцент на ценностных доминантах культуры, концептосфере и коммуникативном поведении. <b>Ограничение:</b> не задаёт уровневого членения — затрудняет анализ языковых средств.
+    </div>
+  </section>
+
+  <!-- 7. СИНТЕЗ — ТАБЛИЦА -->
+  <section class="slide">
+    <span class="kicker">Раздел 4</span>
+    <h2>Концептуальный синтез моделей: <em>вертикаль и горизонталь</em></h2>
+
+    <table class="synth">
+      <thead>
+        <tr>
+          <th>Модель Ю.Н. Караулова<br>(вертикаль, уровни)</th>
+          <th>Модель В.И. Карасика<br>(горизонталь, аспекты)</th>
+          <th>Что выявляется</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Мотивационный уровень</td>
+          <td>Ценностный аспект</td>
+          <td>Аксиологическая направленность, прецедентные тексты, этикет</td>
+        </tr>
+        <tr>
+          <td>Лингвокогнитивный уровень</td>
+          <td>Познавательный аспект</td>
+          <td>Концепты, картина мира, идеологемы</td>
+        </tr>
+        <tr>
+          <td>Вербально-семантический уровень</td>
+          <td>Поведенческий аспект</td>
+          <td>Языковые средства, коммуникативные тактики</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--navy" style="margin-top:22px;">
+      Модели <b>взаимодополнительны</b>: синтез осуществляется по принципу дополнительности.
+    </div>
+  </section>
+
+  <!-- 8. ПРИНЦИП ДОПОЛНИТЕЛЬНОСТИ -->
+  <section class="slide">
+    <span class="kicker">Раздел 4 · продолжение</span>
+    <h2>Принцип дополнительности: <em>порядок анализа</em></h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step__num">1</div>
+        <p><b>Лексико-грамматические средства</b> и национально-маркированные единицы (реалии, фоновая, коннотативная лексика) — вербально-семантический уровень / поведенческий аспект.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">2</div>
+        <p><b>Ключевые концепты, идеологемы и прецедентные тексты</b> — лингвокогнитивный уровень / познавательный (когнитивный) аспект.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">3</div>
+        <p><b>Коммуникативные цели, мотивы и стратегии</b> — мотивационный уровень / ценностный аспект.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:20px;">
+      <b>Лингвокультурологический подход</b> обеспечивает выявление национально-культурной специфики, <b>лингвопрагматический</b> — анализ коммуникативного поведения. Языковая личность описывается одновременно как носитель национальной картины мира и как индивидуальный коммуникант.
+    </div>
+  </section>
+
+  <!-- 9. ПРИМЕНЕНИЕ -->
+  <section class="slide">
+    <span class="kicker">Раздел 5</span>
+    <h2>Применение модели: <em>языковая личность политика</em></h2>
+
+    <p style="margin:0 0 14px; font-size:clamp(.8rem,1.02vw,.92rem); line-height:1.5; color:var(--ink-soft);">
+      Политическая речь насыщена культурно-значимыми концептами («нация», «свобода», «традиция»), идеологемами, прецедентными текстами и национально-специфическими коммуникативными стратегиями. Материал — речи лидера Консервативной партии Великобритании <b>К. Баденок</b>.
+    </p>
+
+    <div class="grid grid--2">
+      <div class="card">
+        <h3>Вербально-семантический уровень</h3>
+        <p>Британские реалии, фоновая и коннотативная лексика консервативного дискурса.</p>
+      </div>
+      <div class="card card--accent">
+        <h3>Ценностный аспект</h3>
+        <p>Этические и утилитарные нормы, транслируемые в речах.</p>
+      </div>
+      <div class="card">
+        <h3>Лингвокогнитивный уровень</h3>
+        <p>Ключевые концепты британской картины мира, идеологемы консерватизма.</p>
+      </div>
+      <div class="card card--gold">
+        <h3>Познавательный аспект</h3>
+        <p>Способы интерпретации действительности.</p>
+      </div>
+      <div class="card">
+        <h3>Мотивационный уровень</h3>
+        <p>Коммуникативные цели и стратегии: аргументация, самопрезентация, апелляция к ценностям.</p>
+      </div>
+      <div class="card card--gold">
+        <h3>Поведенческий аспект</h3>
+        <p>Вербальные и невербальные индексы коммуникативного поведения.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:18px;">
+      Анализ выявляет как <b>национально-культурную специфику</b> речей политика, так и его <b>индивидуальный идиостиль</b>.
+    </div>
+  </section>
+
+  <!-- 10. ЗАКЛЮЧЕНИЕ -->
+  <section class="slide">
+    <span class="kicker">Заключение</span>
+    <h2>Результаты и перспектива исследования</h2>
+
+    <div class="grid grid--3" style="margin-bottom:18px;">
+      <div class="card">
+        <h3>Модель Караулова</h3>
+        <p>Задаёт уровневую иерархию: от языковых средств к концептам и мотивам.</p>
+      </div>
+      <div class="card card--accent">
+        <h3>Модель Карасика</h3>
+        <p>Задаёт аспектное измерение: ценности, познание, поведение.</p>
+      </div>
+      <div class="card card--gold">
+        <h3>Их объединение</h3>
+        <p>Позволяет описывать языковую личность как носителя национальной культуры и как индивидуального коммуниканта.</p>
+      </div>
+    </div>
+
+    <ul class="bullets" style="margin-bottom:16px;">
+      <li>Синтез обеспечивает <b>всесторонний инструментарий</b> лингвострановедческого анализа языковой личности.</li>
+      <li>Лингвострановедческий потенциал теории реализуется в выявлении <b>национально-маркированных единиц и культурно-значимых концептов</b> в единстве с описанием коммуникативных стратегий и идиостиля.</li>
+      <li>Особую значимость синтез приобретает при изучении <b>политического дискурса</b>.</li>
+    </ul>
+
+    <div class="callout callout--navy">
+      <b>Перспектива:</b> дальнейшее применение синтезированной модели будет апробировано на материале публичных речей К. Баденок.
+    </div>
+  </section>
+
+</main>
+
+<nav class="controls">
+  <button id="prev" aria-label="Назад">&#8249;</button>
+  <span class="counter"><b id="cur">1</b> / <span id="total">10</span></span>
+  <button id="next" aria-label="Вперёд">&#8250;</button>
+  <span class="divider"></span>
+  <button id="exportBtn" class="icon-btn" title="Скачать презентацию в формате PPTX" aria-label="Скачать PPTX">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="7 10 12 15 17 10"></polyline>
+      <line x1="12" y1="15" x2="12" y2="3"></line>
+    </svg>
+  </button>
+</nav>
+
+<div class="hint">← → · пробел</div>
+
+<!-- Оверлей экспорта -->
+<div class="export-overlay" id="exportOverlay">
+  <div class="spinner"></div>
+  <p>Готовим PPTX…</p>
+  <p class="progress-text" id="exportProgress"></p>
+</div>
+
+<script>
+(function(){
+  /* ---------------- Навигация ---------------- */
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total  = slides.length;
+  const bar    = document.getElementById('bar');
+  const curEl  = document.getElementById('cur');
+  document.getElementById('total').textContent = total;
+
+  let index = 0;
+
+  function render(i){
+    index = Math.max(0, Math.min(total - 1, i));
+    slides.forEach((s, n) => s.classList.toggle('is-active', n === index));
+    curEl.textContent = index + 1;
+    bar.style.width = ((index + 1) / total * 100) + '%';
+    slides[index].scrollTop = 0;
+  }
+
+  function next(){ render(index + 1); }
+  function prev(){ render(index - 1); }
+
+  document.getElementById('next').addEventListener('click', next);
+  document.getElementById('prev').addEventListener('click', prev);
+
+  document.addEventListener('keydown', (e) => {
+    switch(e.key){
+      case 'ArrowRight':
+      case 'PageDown':
+      case ' ':
+        e.preventDefault(); next(); break;
+      case 'ArrowLeft':
+      case 'PageUp':
+        e.preventDefault(); prev(); break;
+      case 'Home':
+        e.preventDefault(); render(0); break;
+      case 'End':
+        e.preventDefault(); render(total - 1); break;
+    }
+  });
+
+  // свайпы для тач-устройств
+  let startX = null;
+  const deck = document.getElementById('deck');
+  deck.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive:true});
+  deck.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 60) { dx < 0 ? next() : prev(); }
+    startX = null;
+  }, {passive:true});
+
+  render(0);
+
+  /* ---------------- Экспорт в PPTX ---------------- */
+  const exportBtn = document.getElementById('exportBtn');
+  const overlay   = document.getElementById('exportOverlay');
+  const progressEl = document.getElementById('exportProgress');
+
+  exportBtn.addEventListener('click', exportToPptx);
+
+  async function exportToPptx(){
+    if (exportBtn.classList.contains('loading')) return;
+
+    if (typeof PptxGenJS === 'undefined' || typeof html2canvas === 'undefined'){
+      alert('Библиотеки для экспорта не загрузились.\nПроверьте подключение к интернету и перезагрузите страницу.');
+      return;
+    }
+
+    exportBtn.classList.add('loading');
+    exportBtn.disabled = true;
+    overlay.classList.add('is-visible');
+    document.body.classList.add('exporting');
+
+    const originalIndex = Math.max(0, slides.findIndex(s => s.classList.contains('is-active')));
+    const scrollPositions = slides.map(s => s.scrollTop);
+    const deckEl = document.getElementById('deck');
+
+    try {
+      /* Размер слайда PPTX подгоняем под пропорции сцены */
+      const rect  = deckEl.getBoundingClientRect();
+      const ratio = rect.width / rect.height;
+      const slideW = 10;                    // дюймов
+      const slideH = slideW / ratio;
+
+      const pptx = new PptxGenJS();
+      pptx.author  = 'Брыскин Н.М.';
+      pptx.title   = 'Лингвострановедческий потенциал теории языковой личности';
+      pptx.subject = 'Концептуальный синтез моделей Ю.Н. Караулова и В.И. Карасика';
+      pptx.defineLayout({ name: 'CUSTOM', width: slideW, height: slideH });
+      pptx.layout = 'CUSTOM';
+
+      const scale = Math.max(2, window.devicePixelRatio || 2);
+
+      for (let i = 0; i < slides.length; i++){
+        slides.forEach((s, n) => {
+          s.classList.toggle('is-active', n === i);
+          if (n === i) s.scrollTop = 0;
+        });
+
+        progressEl.textContent = `Слайд ${i + 1} из ${slides.length}`;
+        await new Promise(r => setTimeout(r, 80));  // даём браузеру перерисовать
+
+        const canvas = await html2canvas(deckEl, {
+          scale: scale,
+          backgroundColor: '#ffffff',
+          useCORS: true,
+          logging: false
+        });
+
+        const imgData = canvas.toDataURL('image/png');
+        const pptSlide = pptx.addSlide();
+        pptSlide.addImage({ data: imgData, x: 0, y: 0, w: slideW, h: slideH });
+      }
+
+      progressEl.textContent = 'Сохраняем файл…';
+      await pptx.writeFile({ fileName: 'Брыскин_Лингвострановедческий_потенциал.pptx' });
+
+    } catch (err) {
+      console.error(err);
+      alert('Не удалось создать PPTX:\n' + (err && err.message ? err.message : err));
+    } finally {
+      /* Восстанавливаем исходное состояние */
+      document.body.classList.remove('exporting');
+      slides.forEach((s, n) => {
+        s.classList.toggle('is-active', n === originalIndex);
+        s.scrollTop = scrollPositions[n];
+      });
+      overlay.classList.remove('is-visible');
+      exportBtn.classList.remove('loading');
+      exportBtn.disabled = false;
+    }
+  }
+})();
+</script>
+</body>
+</html>
